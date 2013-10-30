@@ -1,0 +1,31 @@
+* MOSCOW Analysis
+** MUST
+*** M1: BitTorrentClient (BTC) MUST read metainfo file (*.torrent).
+**** Bencoding
+It is encoding data.
+*** M2: BTC MUST allow user to retreive other peers which will/may communicate with. 
+**** Tracker HTTP/HTTPS Protocol  
+Client --request--> Tracker
+Tracker --response--> Client
+*** M3: BTC MUST allow user to connect to peers 
+**** Peer Wire Protocol  
+***** Handshake
+BTC opens a port for local peer and listens on this port for incoming connections.
+BTC must inform Tracker about this port. 
+Remote peer must connects over a TCP channel and transmit a first required message to complete handshake.
+The structure of a handshake message is string of bytes as follows;
+ _____________ ________________________________________________
+| Name Length | Protocol Name | Reserved | Info Hash | Peer ID |
+|_____________|_______________|__________|___________|_________|
+
+*** M4: Client MUST be able to download from connected peers
+**** Peer Wire Protocol 
+Once handshake has been completed, both remote and local peer can send asynchronous message to each other.
+Message contains state of local peer and transferring data.
+
+*** M5: BTC MUST allow user to share complete pieces with others.
+**** Peer Wire Protocol 
+Once handsake is completed, remote peer uploads while local peer downloads. 
+
+** SHOULD
+*** S1: User SHOULD select where to save the file locally.
