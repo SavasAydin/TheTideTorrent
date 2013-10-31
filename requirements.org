@@ -3,8 +3,8 @@
 *** M1: TheTideTorrent MUST parse and generate metainfo file (*.torrent).
 **** Parse: TheTideTorrent MUST decode torrent file.
 A torrent file is in a special binary format and contains two section.
-1- Announce: The URL of the tracker.
-2- Info: Integrity metadata about all the pieces such as file name, length, 
+1. Announce: The URL of the tracker.
+2. Info: Integrity metadata about all the pieces such as file name, length, 
 piece length and SHA-1 hash code for each piece.  and list of trackers.
 **** Generate: TheTideTorrent MUST encode bencode-formatted file.
 Bencoding is encoding of four different type of values; Byte strings, integers, 
@@ -12,15 +12,21 @@ lists and dictionaries. TheTideTorrent must use bencoding for storing and
 transmiting data.
 *** M2: TheTideTorrent MUST retreive other peers which will/may communicate with. 
 **** Tracker HTTP/HTTPS Protocol  
+#+BEGIN_EXAMPLE
 Client --request--> Tracker
 Tracker --response--> Client
+#+END_EXAMPLE
 *** M3: TheTideTorrent MUST connect to peers 
 **** Peer Wire Protocol  
 ***** Handshake
 BTC opens a port for local peer and listens on this port for incoming connections.
+
 BTC must inform Tracker about this port. 
-Remote peer must connects over a TCP channel 
+
+Remote peer must connects over a TCP channel.
+
 Remote peer then transmits a first required message to complete handshake.
+
 The structure of a handshake message is string of bytes as follows;
 
  _____________ ________________________________________________
@@ -29,12 +35,15 @@ The structure of a handshake message is string of bytes as follows;
 
 *** M4: User MUST be able to download from connected peers
 **** Peer Wire Protocol 
-Once handshake has been completed, both remote and local peer can send asynchronous message to each other.
+Once handshake has been completed, both remote and local peer 
+can send asynchronous message to each other.
+
 The message contains state of local peer and transferring data.
 
 *** M5: User MUST be able to share complete pieces with others.
 **** Peer Wire Protocol 
-Once handsake is completed and a piece of data is downloaded, remote peer uploads while local peer downloads. 
+Once handsake is completed and a piece of data is downloaded, 
+remote peer uploads while local peer downloads. 
 
 ** SHOULD
 *** S1: User SHOULD select where to save the file locally.
@@ -44,7 +53,11 @@ download has already begun.
 
 ** References
 [[http://www.bittorrent.org/beps/bep_0003.html][Bram Cohen BitTorrent Protocol Specification]]
+
 [[https://wiki.theory.org/BitTorrentSpecification][Theory Wiki BitTorrent Protocol Specification]]
-[[http://en.wikipedia.org/wiki/BitTorrent_tracker][Wikipedia Bittorrent_tracker]]
-[[http://en.wikipedia.org/wiki/Torrent_file][Wikipedia Torrent_file]]
-[[http://en.wikipedia.org/wiki/BitTorrent][Wikipedia BitTorrent]]
+[[http://en.wikipedia.org/wiki/BitTorrent_tracker][
+Wikipedia Bittorrent_tracker]]
+[[http://en.wikipedia.org/wiki/Torrent_file][
+Wikipedia Torrent_file]]
+[[http://en.wikipedia.org/wiki/BitTorrent][
+Wikipedia BitTorrent]]
