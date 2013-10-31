@@ -1,10 +1,15 @@
 * MOSCOW Analysis
 ** MUST
-*** M1: TheTideTorrent MUST parse metainfo file (*.torrent).
-**** Decoding
-Retrieve information from torrent file.
-**** Bencoding
-It is encoding data.
+*** M1: TheTideTorrent MUST parse and generate metainfo file (*.torrent).
+**** Parse: TheTideTorrent MUST decode torrent file.
+A torrent file is in a special binary format and contains two section.
+1- Announce: The URL of the tracker.
+2- Info: Integrity metadata about all the pieces such as file name, length, 
+piece length and SHA-1 hash code for each piece.  and list of trackers.
+**** Generate: TheTideTorrent MUST encode bencode-formatted file.
+Bencoding is encoding of four different type of values; Byte strings, integers, 
+lists and dictionaries. TheTideTorrent must use bencoding for storing and 
+transmiting data.
 *** M2: TheTideTorrent MUST retreive other peers which will/may communicate with. 
 **** Tracker HTTP/HTTPS Protocol  
 Client --request--> Tracker
@@ -17,6 +22,7 @@ BTC must inform Tracker about this port.
 Remote peer must connects over a TCP channel 
 Remote peer then transmits a first required message to complete handshake.
 The structure of a handshake message is string of bytes as follows;
+
  _____________ ________________________________________________
 | Name Length | Protocol Name | Reserved | Info Hash | Peer ID |
 |_____________|_______________|__________|___________|_________|
@@ -32,3 +38,13 @@ Once handsake is completed and a piece of data is downloaded, remote peer upload
 
 ** SHOULD
 *** S1: User SHOULD select where to save the file locally.
+*** S2: User SHOULD continue to communicate with the Tracker   
+User can contact the Tracker in order to retreive newer peers even though
+download has already begun. 
+
+** References
+[[http://www.bittorrent.org/beps/bep_0003.html][Bram Cohen BitTorrent Protocol Specification]]
+[[https://wiki.theory.org/BitTorrentSpecification][Theory Wiki BitTorrent Protocol Specification]]
+[[http://en.wikipedia.org/wiki/BitTorrent_tracker][Wikipedia Bittorrent_tracker]]
+[[http://en.wikipedia.org/wiki/Torrent_file][Wikipedia Torrent_file]]
+[[http://en.wikipedia.org/wiki/BitTorrent][Wikipedia BitTorrent]]
