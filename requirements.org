@@ -1,15 +1,15 @@
 * MOSCOW Analysis
 ** MUST
-*** M1: BitTorrentClient (BTC) MUST parse metainfo file (*.torrent).
+*** M1: TheTideTorrent MUST parse metainfo file (*.torrent).
 **** Decoding
 Retrieve information from torrent file.
 **** Bencoding
 It is encoding data.
-*** M2: BTC MUST retreive other peers which will/may communicate with. 
+*** M2: TheTideTorrent MUST retreive other peers which will/may communicate with. 
 **** Tracker HTTP/HTTPS Protocol  
 Client --request--> Tracker
 Tracker --response--> Client
-*** M3: BTC MUST connect to peers 
+*** M3: TheTideTorrent MUST connect to peers 
 **** Peer Wire Protocol  
 ***** Handshake
 BTC opens a port for local peer and listens on this port for incoming connections.
@@ -21,12 +21,12 @@ The structure of a handshake message is string of bytes as follows;
 | Name Length | Protocol Name | Reserved | Info Hash | Peer ID |
 |_____________|_______________|__________|___________|_________|
 
-*** M4: Client MUST be able to download from connected peers
+*** M4: User MUST be able to download from connected peers
 **** Peer Wire Protocol 
 Once handshake has been completed, both remote and local peer can send asynchronous message to each other.
 The message contains state of local peer and transferring data.
 
-*** M5: Client MUST be able to share complete pieces with others.
+*** M5: User MUST be able to share complete pieces with others.
 **** Peer Wire Protocol 
 Once handsake is completed and a piece of data is downloaded, remote peer uploads while local peer downloads. 
 
