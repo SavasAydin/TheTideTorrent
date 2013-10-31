@@ -52,12 +52,8 @@ User can contact the Tracker in order to retreive newer peers even though
 download has already begun. 
 
 ** References
-[[http://www.bittorrent.org/beps/bep_0003.html][Bram Cohen BitTorrent Protocol Specification]]
-
-[[https://wiki.theory.org/BitTorrentSpecification][Theory Wiki BitTorrent Protocol Specification]]
-[[http://en.wikipedia.org/wiki/BitTorrent_tracker][
-Wikipedia Bittorrent_tracker]]
-[[http://en.wikipedia.org/wiki/Torrent_file][
-Wikipedia Torrent_file]]
-[[http://en.wikipedia.org/wiki/BitTorrent][
-Wikipedia BitTorrent]]
+1. [[http://www.bittorrent.org/beps/bep_0003.html][Bram Cohen BitTorrent Protocol Specification]]
+2. [[https://wiki.theory.org/BitTorrentSpecification][Theory Wiki BitTorrent Protocol Specification]]
+3. [[http://en.wikipedia.org/wiki/BitTorrent_tracker][Wikipedia Bittorrent_tracker]]
+4. [[http://en.wikipedia.org/wiki/Torrent_file][Wikipedia Torrent_file]]
+5. [[http://en.wikipedia.org/wiki/BitTorrent][Wikipedia BitTorrent]]
