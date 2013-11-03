@@ -1,55 +1,73 @@
 * MOSCOW Analysis
 ** MUST
-*** M1: TheTideTorrent MUST parse and generate metainfo file (*.torrent).
-**** Parse: TheTideTorrent MUST decode torrent file.
-A torrent file is in a special binary format and contains two section.
+*** ONGOING M1: TheTideTorrent MUST decode the metainfo file (*.torrent).
+    A torrent file is bencoded dictionaries which is a special binary format and contains 4 types of data structure.
+1. Byte strings: <length of string>:<string>
+#+BEGIN_EXAMPLE 
+5:savas 
+#+END_EXAMPLE
+2. Integers: 
++ i<integer>e      
++ Integers are represented by an 'i' followed by the number in base 10 followed by an 'e'. 
+#+BEGIN_EXAMPLE 
+i3e corresponds to 3 and i-3e corresponds to -3. 
+Integers have no size limitation. 
+All encodings with a leading zero, such as i03e, are invalid, 
+other than i0e which corresponds to 0.
+i-0e is invalid. 
+#+END_EXAMPLE
+3. Lists: 
++ l[value_1][value_2][value_3][value_n]e
+#+BEGIN_EXAMPLE 
+{savas, torrent} is stored as 15:savas7:torrente
+#+END_EXAMPLE
+4. Dictionary: 
++ d[key_1][value_1][key_2][value_2][key_n][value_n]e 
++ Keys are string and ordered alphabetically.
+#+BEGIN_EXAMPLE
+{savas-engineer, torrent-file} is stored as d5:savas8:engineer7:torrent4:filee
+#+END_EXAMPLE
+*** M2: TheTideTorrent MUST encode metainfo file..
++ Bencoding is the way of storing some data structure in the torrent. 
++ TheTideTorrent need that in order to store and transmit data.
+*** M3: TheTideTorrent MUST identify the sections of metainfo file.
 1. Announce: The URL of the tracker.
-2. Info: Integrity metadata about all the pieces such as file name, length, 
-piece length and SHA-1 hash code for each piece.  and list of trackers.
-**** Generate: TheTideTorrent MUST encode bencode-formatted file.
-Bencoding is encoding of four different type of values; Byte strings, integers, 
-lists and dictionaries. TheTideTorrent must use bencoding for storing and 
-transmiting data.
-*** M2: TheTideTorrent MUST retreive other peers which will/may communicate with. 
+2. Info: Integrity metadata about all the pieces such as file name, length, piece length and SHA-1 hash code for each piece.
+TheTideTorrent MUST be able to parse a torrent file into those two sections.
+*** M4: TheTideTorrent MUST contact the Tracker in order retreive other peers which will/may communicate with. 
 **** Tracker HTTP/HTTPS Protocol  
 #+BEGIN_EXAMPLE
 Client --request--> Tracker
 Tracker --response--> Client
 #+END_EXAMPLE
-*** M3: TheTideTorrent MUST connect to peers 
+*** M5: TheTideTorrent MUST connect to peers 
 **** Peer Wire Protocol  
 ***** Handshake
-BTC opens a port for local peer and listens on this port for incoming connections.
++ TheTideTorrent opens a port for local peer and listens on this port for incoming connections. 
 
-BTC must inform Tracker about this port. 
++ The tracker must know about this port. 
 
-Remote peer must connects over a TCP channel.
++ Remote peer must connect over a TCP channel.
 
-Remote peer then transmits a first required message to complete handshake.
++ Remote peer then transmits a first required message to complete handshake.
 
-The structure of a handshake message is string of bytes as follows;
-
++ The structure of a handshake message is string of bytes as follows;
  _____________ ________________________________________________
 | Name Length | Protocol Name | Reserved | Info Hash | Peer ID |
 |_____________|_______________|__________|___________|_________|
 
-*** M4: User MUST be able to download from connected peers
+*** M6: User MUST be able to download from connected peers
 **** Peer Wire Protocol 
-Once handshake has been completed, both remote and local peer 
-can send asynchronous message to each other.
-
-The message contains state of local peer and transferring data.
-
-*** M5: User MUST be able to share complete pieces with others.
++ Once handshake has been completed, both remote and local peers can send asynchronous message to each other.
++ This message contains state of local peer and transferring data.
+*** M7: User MUST be able to share complete pieces with others.
 **** Peer Wire Protocol 
-Once handsake is completed and a piece of data is downloaded, 
-remote peer uploads while local peer downloads. 
+Once handsake has been completed and a piece of data has been downloaded, remote peer uploads. 
 
 ** SHOULD
 *** S1: User SHOULD select where to save the file locally.
 *** S2: User SHOULD continue to communicate with the Tracker   
-User can contact the Tracker in order to retreive newer peers even though
-download has already begun. 
+User can contact the Tracker in order to retreive newer peers even though download has already begun. 
 
 ** References
 1. [[http://www.bittorrent.org/beps/bep_0003.html][Bram Cohen BitTorrent Protocol Specification]]
@@ -57,3 +75,6 @@ download has already begun.
 3. [[http://en.wikipedia.org/wiki/BitTorrent_tracker][Wikipedia Bittorrent_tracker]]
 4. [[http://en.wikipedia.org/wiki/Torrent_file][Wikipedia Torrent_file]]
 5. [[http://en.wikipedia.org/wiki/BitTorrent][Wikipedia BitTorrent]]
+
+
+
