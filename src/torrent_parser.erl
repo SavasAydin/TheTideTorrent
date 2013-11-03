@@ -3,23 +3,25 @@
 -export([parse/1
 	]).
 
-%% parse(ByteString) ->
-%%     [IntString, String] = string:tokens(binary_to_list(ByteString),":"),
-%%     {Int,_} = string:to_integer(IntString),
-%%     case length(String) == Int of
-%% 	true ->
-%% 	    String;
-%% 	false ->
-%% 	    {error, incorrect_length}
-%%     end.
+parse(<<$i,ByteInteger/binary>> = Bin) ->
+    InStringFormat = parse_integer(Bin),
+    {Integer,[]} = string:to_integer(InStringFormat),
+    Integer.
 
-parse(MetaData) when is_binary(MetaData) ->
-    parse(binary_to_list(MetaData));
-parse([$i | Rest ]) ->
-    parse_integer(Rest).
-
-parse_integer([$e | _Rest]) ->
+parse_integer(<<$i,$0,Integer,Rest/binary>>) when Integer >= $0 andalso
+						  Integer =< $9 ->
+    throw({error, invalid_integer});
+parse_integer(<<$i,$-,Integer,Rest/binary>>) when Integer > $0 andalso
+						  Integer =< $9 ->
+    [$-, Integer | parse_integer(Rest)];
+parse_integer(<<$i,Rest/binary>>) ->
+    parse_integer(Rest);
+parse_integer(<<$e,_/binary>>) ->
     [];
-parse_integer([Integer | Rest]) ->
-    [Integer |  parse_integer(Rest)].
+parse_integer(<<Integer,Rest/binary>>) when Integer >= $0 andalso
+					    Integer =< $9 ->
+    [Integer | parse_integer(Rest)];
+parse_integer(_) ->
+    throw({error, invalid_integer}).
 
+    
