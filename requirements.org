@@ -2,14 +2,15 @@
 ** MUST
 *** ONGOING M1: TheTideTorrent MUST decode the metainfo file (*.torrent).
     A torrent file is bencoded dictionaries which is a special binary format and contains 4 types of data structure.
-1. Byte strings: <length of string>:<string>
-#+BEGIN_EXAMPLE 
+1. Byte strings: 
+ + Format :: <length of string>:<string>
+ #+BEGIN_EXAMPLE 
 5:savas 
 #+END_EXAMPLE
 2. Integers: 
-+ i<integer>e      
-+ Integers are represented by an 'i' followed by the number in base 10 followed by an 'e'. 
-#+BEGIN_EXAMPLE 
+ + Format :: i<integer>e      
+ + Integers are represented by an 'i' followed by the number in base 10 followed by an 'e'. 
+ #+BEGIN_EXAMPLE 
 i3e corresponds to 3 and i-3e corresponds to -3. 
 Integers have no size limitation. 
 All encodings with a leading zero, such as i03e, are invalid, 
@@ -17,14 +18,14 @@ other than i0e which corresponds to 0.
 i-0e is invalid. 
 #+END_EXAMPLE
 3. Lists: 
-+ l[value_1][value_2][value_3][value_n]e
-#+BEGIN_EXAMPLE 
+ + Format :: l[value_1][value_2][value_3][value_n]e
+ #+BEGIN_EXAMPLE 
 {savas, torrent} is stored as 15:savas7:torrente
 #+END_EXAMPLE
 4. Dictionary: 
-+ d[key_1][value_1][key_2][value_2][key_n][value_n]e 
-+ Keys are string and ordered alphabetically.
-#+BEGIN_EXAMPLE
+ + Format :: d[key_1][value_1][key_2][value_2][key_n][value_n]e 
+ + Keys are string and ordered alphabetically.
+ #+BEGIN_EXAMPLE
 {savas-engineer, torrent-file} is stored as d5:savas8:engineer7:torrent4:filee
 #+END_EXAMPLE
 *** M2: TheTideTorrent MUST encode metainfo file..
