@@ -1,41 +1,49 @@
 * MOSCOW Analysis
 ** MUST
 *** ONGOING M1: TheTideTorrent MUST decode the metainfo file (*.torrent). 
-    A torrent file is bencoded dictionaries which is a special binary format and contains 4 types of data structure.
++ TheTideTorrent MUST be able to parse a torrent file into following structure.
+#+BEGIN_EXAMPLE
+- Info: A dictionary decscribing the files.
+ - length: Length of file formatted as integer.
+ - md5sum (optional): A 32 character hexadecimal string corresponding to the MD5 sum of the file.   
+ - pieces length: Number of bytes in each pieces formatted as integer.
+- Announce: The URL of the tracker.
+- Announce-list (optional)
+- Creation date (optional)
+- Comment (optional)
+- Created by (optional)
+#+END_EXAMPLE
+*** ONGOING M2: TheTideTorrent MUST encode metainfo file..
++ Bencoding is the way of storing some data structure in the torrent. 
++ A torrent file is bencoded dictionaries which contains 4 types of data structure.
 1. Byte strings: 
-   + Format -> <length of string>:<string>
+   + Format :: <length of string>:<string>
 #+BEGIN_EXAMPLE 
 "savas" is stored as 5:savas 
 #+END_EXAMPLE
 2. Integers: 
-   + Format -> i<integer>e      
+   + Format :: i<integer>e      
    + Integers are represented by an 'i' followed by the number in base 10 followed by an 'e'. 
    + Integers have no size limitation. 
    + All encodings with a leading zero are invalid, other than i0e which corresponds to 0.
 #+BEGIN_EXAMPLE 
-i3e corresponds to 3 
-i-3e corresponds to -3. 
+"3" is stored as i3e 
+"-3" is stored as i-3e 
 i03e is invalid
 i-0e is invalid. 
+i2013.11.03e is invalid
 #+END_EXAMPLE
 3. Lists: 
-   + Format -> l[value_1][value_2][value_3][value_n]e
+   + Format :: l[value_1][value_2][value_3][value_n]e
 #+BEGIN_EXAMPLE 
 {savas, torrent} is stored as 15:savas7:torrente
 #+END_EXAMPLE
 4. Dictionary: 
-   + Format -> d[key_1][value_1][key_2][value_2][key_n][value_n]e 
+   + Format :: d[key_1][value_1][key_2][value_2][key_n][value_n]e 
    + Keys are string and ordered alphabetically.
  #+BEGIN_EXAMPLE
 {savas-engineer, torrent-file} is stored as d5:savas8:engineer7:torrent4:filee
 #+END_EXAMPLE
-*** M2: TheTideTorrent MUST encode metainfo file..
-+ Bencoding is the way of storing some data structure in the torrent. 
-+ TheTideTorrent need that in order to store and transmit data.
-*** M3: TheTideTorrent MUST identify the sections of metainfo file.
-1. Announce: The URL of the tracker.
-2. Info: Integrity metadata about all the pieces such as file name, length, piece length and SHA-1 hash code for each piece.
-TheTideTorrent MUST be able to parse a torrent file into those two sections.
 *** M4: TheTideTorrent MUST contact the Tracker in order retreive other peers which will/may communicate with. 
 **** Tracker HTTP/HTTPS Protocol  
 #+BEGIN_EXAMPLE
@@ -54,9 +62,7 @@ Tracker --response--> Client
 + Remote peer then transmits a first required message to complete handshake.
 
 + The structure of a handshake message is string of bytes as follows;
- _____________ ________________________________________________
-| Name Length | Protocol Name | Reserved | Info Hash | Peer ID |
-|_____________|_______________|__________|___________|_________|
+| Name Length | Protocol Name | Reseverd | Info Hash | Peer ID |
 
 *** M6: User MUST be able to download from connected peers
 **** Peer Wire Protocol 
