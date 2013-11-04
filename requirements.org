@@ -3,20 +3,20 @@
 *** ONGOING M1: TheTideTorrent MUST decode the metainfo file (*.torrent). 
 + TheTideTorrent MUST be able to parse a torrent file into following structure.
 #+BEGIN_EXAMPLE
-- Info: A dictionary decscribing the files.
- - length: Length of file formatted as integer.
- - md5sum (optional): A 32 character hexadecimal string corresponding to the MD5 sum of the file.   
- - pieces length: Number of bytes in each pieces formatted as integer.
- - pieces: String consisting of the concatenation of all 20-byte SHA1 hash values, one per piece (raw binary encoded).
-- Announce: The URL of the tracker.
-- Announce-list (optional)
-- Creation date (optional)
-- Comment (optional)
-- Created by (optional)
++ Info: A dictionary decscribing the files.
+ + length: Length of file formatted as integer.
+ + md5sum (optional): A 32 character hexadecimal string corresponding to the MD5 sum of the file.   
+ + pieces length: Number of bytes in each pieces formatted as integer.
+ + pieces: String consisting of the concatenation of all 20-byte SHA1 hash values, one per piece.
++ Announce: The URL of the tracker.
++ Announce-list (optional)
++ Creation date (optional)
++ Comment (optional)
++ Created by (optional)
 #+END_EXAMPLE
 + A sample of a single-file torrent could be as 
 #+BEGIN_EXAMPLE
-d8:announce34:http://129.62.150.58:6969/announce13:creation datei1096224957e4:infod6:lengthi278422e4:name5:c.pdf12:piece lengthi262144e6:pieces40:#+F�J
+d8:announce34:http://129.62.150.58:6969/announce13:creation datei1096224957e4:infod6:lengthi278422e4:name5:c.pdf12:piece lengthi262144e6:pieces40:#+F�J...
 #+END_EXAMPLE
 *** ONGOING M2: TheTideTorrent MUST encode metainfo file..
 + Bencoding is the way of storing some data structure in the torrent. 
@@ -49,13 +49,38 @@ i2013.11.03e is invalid
  #+BEGIN_EXAMPLE
 {savas-engineer, torrent-file} is stored as d5:savas8:engineer7:torrent4:filee
 #+END_EXAMPLE
-*** M4: TheTideTorrent MUST contact the Tracker in order retreive other peers which will/may communicate with. 
+*** M3: TheTideTorrent MUST contact the Tracker 
 **** Tracker HTTP/HTTPS Protocol  
++ A tracker is an HTTP service which responds to HTTP GET request.
++ The requests include info from clients that help the tracker keep overall statistics about the torrent. 
++ The response includes a peer list that helps the client connect to peers.
++ Client --GET_request--> Tracker with following parameters;
 #+BEGIN_EXAMPLE
-Client --request--> Tracker
-Tracker --response--> Client
++ info_hash: 20-byte SHA1 hash of the value of the info key from the Metainfo file.
++ peer_id: 20-byte string used as a unique ID for the client.
++ port: The port number that the client is listening on.
++ uploaded: The total amount uploaded so far, encoded in base ten ascii.
++ downloaded: The total amount downloaded so far, encoded in base ten ascii.
++ left: The number of bytes this client still has to download, encoded in base ten ascii.
++ event: If specified, must be one of started, completed, or stopped. 
++ started: The first request to the tracker must include the event key with the started value.
++ stopped: Must be sent to the tracker if the client is shutting down gracefully. 
++ completed: Must be sent to the tracker when the download completes.
++ ip (optional)
++ numwant (optional)
 #+END_EXAMPLE
-*** M5: TheTideTorrent MUST connect to peers 
++ Tracker --response--> Client consisting of a bencoded dictionary with the following keys;
+#+BEGIN_EXAMPLE
++ failure reason: If any, then no need of other keys. The value is a human-readable error message (string).
++ interval: Interval in seconds that the client should wait between sending regular requests to the tracker.
++ complete: number of peers with the entire file, i.e. seeders (integer).
++ incomplete: number of non-seeder peers, aka "leechers" (integer).
++ peers: The value is a list of dictionaries, each with the following keys;
+ + peer_id: peer's id (string).
+ + ip: peer's ip address (ipv4, ipv6 or DNS name formatted as string).
+ + port: peer's port number (integer).
+#+END_EXAMPLE
+*** M4: TheTideTorrent MUST connect to peers 
 **** Peer Wire Protocol  
 ***** Handshake
 + TheTideTorrent opens a port for local peer and listens on this port for incoming connections. 
@@ -69,11 +94,11 @@ Tracker --response--> Client
 + The structure of a handshake message is string of bytes as follows;
 | Name Length | Protocol Name | Reseverd | Info Hash | Peer ID |
 
-*** M6: User MUST be able to download from connected peers
+*** M5: User MUST be able to download from connected peers
 **** Peer Wire Protocol 
 + Once handshake has been completed, both remote and local peers can send asynchronous message to each other.
 + This message contains state of local peer and transferring data.
-*** M7: User MUST be able to share complete pieces with others.
+*** M6: User MUST be able to share complete pieces with others.
 **** Peer Wire Protocol 
 Once handsake has been completed and a piece of data has been downloaded, remote peer uploads. 
 
