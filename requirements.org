@@ -14,6 +14,10 @@
 - Comment (optional)
 - Created by (optional)
 #+END_EXAMPLE
++ A sample of a single-file torrent could be as 
+#+BEGIN_EXAMPLE
+d8:announce34:http://129.62.150.58:6969/announce13:creation datei1096224957e4:infod6:lengthi278422e4:name5:c.pdf12:piece lengthi262144e6:pieces40:#+F�J
+#+END_EXAMPLE
 *** ONGOING M2: TheTideTorrent MUST encode metainfo file..
 + Bencoding is the way of storing some data structure in the torrent. 
 + A torrent file is bencoded dictionaries which contains 4 types of data structure.
