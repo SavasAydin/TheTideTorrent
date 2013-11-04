@@ -7,6 +7,7 @@
  - length: Length of file formatted as integer.
  - md5sum (optional): A 32 character hexadecimal string corresponding to the MD5 sum of the file.   
  - pieces length: Number of bytes in each pieces formatted as integer.
+ - pieces: String consisting of the concatenation of all 20-byte SHA1 hash values, one per piece (raw binary encoded).
 - Announce: The URL of the tracker.
 - Announce-list (optional)
 - Creation date (optional)
