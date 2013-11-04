@@ -17,12 +17,12 @@
 + Bencoding is the way of storing some data structure in the torrent. 
 + A torrent file is bencoded dictionaries which contains 4 types of data structure.
 1. Byte strings: 
-   + Format :: <length of string>:<string>
+   + Format:  <length of string>:<string>
 #+BEGIN_EXAMPLE 
 "savas" is stored as 5:savas 
 #+END_EXAMPLE
 2. Integers: 
-   + Format :: i<integer>e      
+   + Format: i<integer>e      
    + Integers are represented by an 'i' followed by the number in base 10 followed by an 'e'. 
    + Integers have no size limitation. 
    + All encodings with a leading zero are invalid, other than i0e which corresponds to 0.
@@ -34,12 +34,12 @@ i-0e is invalid.
 i2013.11.03e is invalid
 #+END_EXAMPLE
 3. Lists: 
-   + Format :: l[value_1][value_2][value_3][value_n]e
+   + Format: l[value_1][value_2][value_3][value_n]e
 #+BEGIN_EXAMPLE 
 {savas, torrent} is stored as 15:savas7:torrente
 #+END_EXAMPLE
 4. Dictionary: 
-   + Format :: d[key_1][value_1][key_2][value_2][key_n][value_n]e 
+   + Format: d[key_1][value_1][key_2][value_2][key_n][value_n]e 
    + Keys are string and ordered alphabetically.
  #+BEGIN_EXAMPLE
 {savas-engineer, torrent-file} is stored as d5:savas8:engineer7:torrent4:filee
