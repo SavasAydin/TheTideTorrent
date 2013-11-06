@@ -1,0 +1,23 @@
+* Release Plan
+** User Story 1
+As a user, I want to know statistics of peers about the torrent so that TheTideTorrent shall communicate with the Tracker to fetch related information;
+- List of peers 
+- Number of peers that has entire file
+- Number of peers that doesnt seed
+
+** User Story 2
+As a user I want to know metainfo so that TheTideTorrent shall retrieve all the possible information from the torrent file.
+
+** User Story 3
+As a user I want to be able to contact existing peers so that TheTideTorrent shall communicate and handshake with those peers.
+
+** User Story 4
+As a user I want to download the torrent so that TheTideTorrent shall send state of local peer and receive transferring data from remote peer.
+
+** User Story 5
+As a user I want to upload the torrent so that TheTideTorrent shall transmit completed pieces of torrent to peers that communicating with.
+
+** User Story 6
+As a user I want to select the folder to download so that TheTideTorret shall ask me where to save to the file locally.
+   
+   
