@@ -1,23 +1,68 @@
-* Release Plan
-** User Story 1
-As a user, I want to know statistics of peers about the torrent so that TheTideTorrent shall communicate with the Tracker to fetch related information;
-- List of peers 
-- Number of peers that has entire file
-- Number of peers that doesnt seed
+* Delivery Plan (inspired from DSDM Atern)
+** Scheduling Work
+*** Timeboxes
+A primary purpose of Delivery Plan is to provide a schedule of the increments and with in them, the TimeBoxes that make upthe project. 
 
-** User Story 2
-As a user I want to know metainfo so that TheTideTorrent shall retrieve all the possible information from the torrent file.
++ Each timebox is 2 weeks 
++ One timebox for project kick-off 
++ 6 timesboxes to develop TheTideTorrent.
 
-** User Story 3
-As a user I want to be able to contact existing peers so that TheTideTorrent shall communicate and handshake with those peers.
+| TimeBox 1  | TimeBox 2 | TimeBox 3 | TimeBox 4 | TimeBox 5 | TimeBox 6 |
+| US 1 and 2 | US 3      | US 4      | US 5      | US 6      | US 7      |
+  
+** User Stories
+*** User Story 1
+As a user, 
+I want to know metainfo 
+so that 
+TheTideTorrent shall retrieve all the possible information from the torrent file.
++ Related Requirement -> M1
 
-** User Story 4
-As a user I want to download the torrent so that TheTideTorrent shall send state of local peer and receive transferring data from remote peer.
+*** User Story 2
+As a user, 
+I want to know statistics of peers of related torrent file 
+so that 
+TheTideTorrent shall communicate with the Tracker to fetch related information.
++ Related Requirement -> M2 and M3
+#+BEGIN_EXAMPLE
+List of peers 
+Number of peers that has entire file
+Number of peers that doesnt seed
+#+END_EXAMPLE
+  
+*** User Story 3
+As a user,
+I want to be able to contact existing peers 
+so that 
+TheTideTorrent shall communicate with those peers.
++ Related Requirement -> M2 and M4
 
-** User Story 5
-As a user I want to upload the torrent so that TheTideTorrent shall transmit completed pieces of torrent to peers that communicating with.
+*** User Story 4
+As a user 
+I want to download the torrent 
+so that 
+TheTideTorrent shall send state of local peer and receive transferring data from remote peer.
++ Related Requirement -> M1, M2 and M5
 
-** User Story 6
-As a user I want to select the folder to download so that TheTideTorret shall ask me where to save to the file locally.
-   
+*** User Story 5
+As a user 
+I want to upload the torrent 
+so that 
+TheTideTorrent shall transmit completed pieces of torrent to peers.
++ Related Requirement -> M1, M2, and M6
+
+*** User Story 6
+As a user 
+I want to know up-to-date peers information about torrent file
+so that 
+TheTideTorret should communicate often with the Tracker. 
++ Related Requirement -> M3 and S2  
+  
+*** User Story 7
+As a user 
+I want to select the folder to download 
+so that 
+TheTideTorret shall ask me where to save to the file locally.
++ Related Requirement -> S1  
+
    
