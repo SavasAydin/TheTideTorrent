@@ -3,12 +3,11 @@
 -export([decode/1
 	]).
 
-decode(<<$i,ByteInteger/binary>> = Bin) ->
+decode(<<$i,_ByteInteger/binary>> = Bin) ->
     InStringFormat = decode_integer(Bin),
-    {Integer,[]} = string:to_integer(InStringFormat),
-    Integer.
+    list_to_integer(InStringFormat).
 
-decode_integer(<<$i,$0,Integer,Rest/binary>>) when Integer >= $0 andalso
+decode_integer(<<$i,$0,Integer,_Rest/binary>>) when Integer >= $0 andalso
 						   Integer =< $9 ->
     throw({error, invalid_integer});
 decode_integer(<<$i,$-,Integer,Rest/binary>>) when Integer > $0 andalso

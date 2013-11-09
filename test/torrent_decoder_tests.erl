@@ -7,6 +7,7 @@ decode_integer_test_() ->
      fun valid_integer_end_with_e_disclosure/0,
      fun valid_integer_zero/0,
      fun valid_negative_integer/0,
+     fun invalid_integer_format_due_to_no_e_enclosure/0,
      fun invalid_integer_format_due_to_not_integer/0,
      fun invalid_integer_due_to_dot/0,
      fun invalid_integer_due_to_minus_after_an_integer/0,
@@ -30,9 +31,13 @@ valid_negative_integer() ->
     ?assertEqual(-3, 
 		 torrent_decoder:decode(<<"i-3e">>)).    
 
+invalid_integer_format_due_to_no_e_enclosure() ->
+  ?assertThrow({error, invalid_integer}, 
+		 torrent_decoder:decode(<<"i12345">>)).
+
 invalid_integer_format_due_to_not_integer() ->
   ?assertThrow({error, invalid_integer}, 
-		 torrent_decoder:decode(<<"inot_integere">>)).
+		 torrent_decoder:decode(<<"inot_inte">>)).
     
 invalid_integer_due_to_dot() ->
     ?assertThrow({error, invalid_integer}, 
