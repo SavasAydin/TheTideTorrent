@@ -1,8 +1,7 @@
 * Delivery Plan (inspired from DSDM Atern)
-** Scheduling Work
-*** Timeboxes
-A primary purpose of Delivery Plan is to provide a schedule of the increments and with in them, the TimeBoxes that make upthe project. 
-
+It is a primary Delivery Plan aiming to provide a schedule of the increments 
+and with in them, the TimeBoxes that captures the all user stories. 
+** Timeboxes
 + Each timebox is 2 weeks 
 + One timebox for project kick-off 
 + 6 timesboxes to develop TheTideTorrent.
