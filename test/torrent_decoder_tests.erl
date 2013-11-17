@@ -19,7 +19,7 @@ decode_integer_test_() ->
      fun invalid_integer_due_to_zero_with_another_integer/0,
      fun invalid_integer_due_to_minus_before_zero/0
     ].
-
+    
 valid_integer_alberts_birthdate() ->
     Metadata = torrent_decoder:decode(<<"i20130922e">>),
     ?assertEqual(20130922, Metadata#metadata.integer). 
@@ -37,7 +37,6 @@ valid_integer_zero() ->
 valid_negative_integer() ->
     Metadata = torrent_decoder:decode(<<"i-3e">>),
     ?assertEqual(-3, Metadata#metadata.integer).
-
 
 invalid_integer_format_due_to_no_e_enclosure() ->
     ?assertException(error, 
@@ -69,3 +68,10 @@ invalid_integer_due_to_minus_before_zero() ->
 		     invalid_integer_format, 
 		     torrent_decoder:decode(<<"i-0e">>)).    
 
+decode_list_test_() ->
+    [fun list_of_animals/0
+    ].
+
+list_of_animals() ->
+    Metadata = torrent_decoder:decode(<<"l3:ant5:horsee">>),
+    ?assertEqual({ant,horse}, Metadata#metadata.list). 
