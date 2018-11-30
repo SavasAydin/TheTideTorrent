@@ -1,42 +1,58 @@
 -module(torrent_decoder).
+-export([decode/1]).
 
--export([decode/1
-	]).
+-record(metadata, {string,
+                   integer,
+                   list,
+                   dict}).
 
--record(metadata, {string_byte,
-		   integer,
-		   list,
-		   dictionary}).
-
-decode(<<$i,ByteInteger/binary>>) ->
-    InStringFormat = decode_integer(ByteInteger, []),
-    #metadata{integer = list_to_integer(InStringFormat)};
+decode(<<N,$:,String/binary>>) when is_integer(N) ->
+    #metadata{string = decode_string(N, String)};
+decode(<<$i,Int/binary>>) ->
+    #metadata{integer = decode_integer(Int)};
 decode(<<$l,List/binary>>) ->
-    DecodedListInString = decode_list(binary_to_list(List), []),
-    DecodedListInAtoms = lists:map(fun(X) -> list_to_atom(X) end, DecodedListInString),
-    #metadata{list = list_to_tuple(DecodedListInAtoms)}.
+    #metadata{list = decode_list(List)};
+decode(<<$d,Dict/binary>>) ->
+    #metadata{dict = decode_dict(Dict)}.
 
-decode_integer(<<$e,_/binary>>,Result) ->
+decode_string(Len, Bin) ->
+    string:substr(binary_to_list(Bin), 1, Len).
+
+decode_integer(Bin) ->
+    decode_integer(binary_to_list(Bin), []).
+
+decode_integer([$e | _], Result) ->
     lists:reverse(Result);
-decode_integer(<<$-,$0,_/binary>>,Result) when Result == [] ->
+decode_integer([$-, $0 | _], []) ->
     error(invalid_integer_format);
-decode_integer(<<$-,Rest/binary>>,Result) when Result == [] ->
-    decode_integer(Rest, [$-|Result]);
-decode_integer(<<$0,Integer,_/binary>>,Result) when Result == [] andalso
-						    Integer >= $0 andalso
-						    Integer =< $9 ->
+decode_integer([$- | Rest], []) ->
+    decode_integer(Rest, [$-]);
+decode_integer([$0, I | _], []) when I >= $0 andalso I =< $9 ->
     error(invalid_integer_format);
-decode_integer(<<Integer,Rest/binary>>, Result) when Integer >= $0 andalso
-						     Integer =< $9 ->
-    decode_integer(Rest, [Integer|Result]);
-decode_integer(_,_) ->
+decode_integer([I | Rest], Result) when I >= $0 andalso I =< $9 ->
+    decode_integer(Rest, [I | Result]);
+decode_integer(_, _) ->
     error(invalid_integer_format).
 
-decode_list([$e], Result) ->
-    lists:reverse(Result);
-decode_list([Number| Tail], Result) ->
-    {No,_} = string:to_integer([Number]),
-    {[_Colon|FirstElement], RestOfList} = lists:split(No+1,Tail),
-    decode_list(RestOfList, [FirstElement | Result]).
+decode_list(Bin) ->
+    decode_list(binary_to_list(Bin), []).
 
+decode_list([$e], Res) ->
+    lists:reverse(Res);
+decode_list([N | Tail], Acc) ->
+    {[$:|Element], Rest} = take_element(N, Tail),
+    decode_list(Rest, [Element | Acc]).
 
+decode_dict(Bin) ->
+    decode_dict(binary_to_list(Bin), maps:new()).
+
+decode_dict([$e], Res) ->
+    Res;
+decode_dict([N | Tail], Acc) ->
+    {[$:|Key], [Num|Dict]} = take_element(N, Tail),
+    {[$:|Value], Rest} = take_element(Num, Dict),
+    decode_dict(Rest, maps:put(Key, Value, Acc)).
+
+take_element(N, Encoded) ->
+    {Len,_} = string:to_integer([N]),
+    lists:split(Len+1, Encoded).
