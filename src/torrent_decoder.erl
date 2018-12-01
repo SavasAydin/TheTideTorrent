@@ -1,28 +1,32 @@
 -module(torrent_decoder).
 -export([decode/1]).
 
--record(metadata, {string,
-                   integer,
-                   list,
-                   dict}).
+decode(Bin) when is_binary(Bin) ->
+    decode(binary_to_list(Bin));
+decode([$i | Int]) ->
+    decode_integer(Int);
+decode([$l | List]) ->
+    decode_list(List);
+decode([$d | Dict]) ->
+    decode_dict(Dict, maps:new());
+decode(Str) ->
+    decode_string(Str).
 
-decode(<<N,$:,String/binary>>) when is_integer(N) ->
-    #metadata{string = decode_string(N, String)};
-decode(<<$i,Int/binary>>) ->
-    #metadata{integer = decode_integer(Int)};
-decode(<<$l,List/binary>>) ->
-    #metadata{list = decode_list(List)};
-decode(<<$d,Dict/binary>>) ->
-    #metadata{dict = decode_dict(Dict)}.
+decode_dict([$e | Rest], Res) ->
+    {Res, Rest};
+decode_dict(Dict, Acc) ->
+    {Key, Dict2} = decode(Dict),
+    {Value, Rest}  = decode(Dict2),
+    decode_dict(Rest, maps:put(Key, Value, Acc)).
 
-decode_string(Len, Bin) ->
-    string:substr(binary_to_list(Bin), 1, Len).
+decode_string(Str) ->
+    get_element(Str).
 
-decode_integer(Bin) ->
-    decode_integer(binary_to_list(Bin), []).
+decode_integer(Int) ->
+    decode_integer(Int, []).
 
-decode_integer([$e | _], Result) ->
-    lists:reverse(Result);
+decode_integer([$e | Rest], Result) ->
+    {lists:reverse(Result), Rest};
 decode_integer([$-, $0 | _], []) ->
     error(invalid_integer_format);
 decode_integer([$- | Rest], []) ->
@@ -34,25 +38,21 @@ decode_integer([I | Rest], Result) when I >= $0 andalso I =< $9 ->
 decode_integer(_, _) ->
     error(invalid_integer_format).
 
-decode_list(Bin) ->
-    decode_list(binary_to_list(Bin), []).
+decode_list(L) ->
+    decode_list(L, []).
 
-decode_list([$e], Res) ->
-    lists:reverse(Res);
-decode_list([N | Tail], Acc) ->
-    {[$:|Element], Rest} = take_element(N, Tail),
-    decode_list(Rest, [Element | Acc]).
+decode_list([$e | Rest], Res) ->
+    {lists:reverse(Res), Rest};
+decode_list(L, Acc) ->
+    {E, Rest} = get_element(L),
+    decode_list(Rest, [E | Acc]).
 
-decode_dict(Bin) ->
-    decode_dict(binary_to_list(Bin), maps:new()).
+get_element(D) ->
+    {Len, D2} = get_length(D, []),
+    {[$: | Element], Rest} = lists:split(list_to_integer(Len)+1, D2),
+    {Element, Rest}.
 
-decode_dict([$e], Res) ->
-    Res;
-decode_dict([N | Tail], Acc) ->
-    {[$:|Key], [Num|Dict]} = take_element(N, Tail),
-    {[$:|Value], Rest} = take_element(Num, Dict),
-    decode_dict(Rest, maps:put(Key, Value, Acc)).
-
-take_element(N, Encoded) ->
-    {Len,_} = string:to_integer([N]),
-    lists:split(Len+1, Encoded).
+get_length([N|T], Acc) when N >= $0 andalso N =< $9 ->
+    get_length(T, [N|Acc]);
+get_length([$:|T], Acc) ->
+    {lists:reverse(Acc), [$:|T]}.
