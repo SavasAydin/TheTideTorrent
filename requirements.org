@@ -1,6 +1,6 @@
 * MOSCOW Analysis
 ** MUST
-*** ONGOING M1: TheTideTorrent MUST decode the metainfo file (*.torrent). 
+*** DONE M1: TheTideTorrent MUST decode the metainfo file (*.torrent). 
 + TheTideTorrent MUST be able to parse a torrent file into following structure.
 #+BEGIN_EXAMPLE
 + Info: A dictionary decscribing the files.
@@ -18,7 +18,7 @@
 #+BEGIN_EXAMPLE
 d8:announce34:http://129.62.150.58:6969/announce13:creation datei1096224957e4:infod6:lengthi278422e4:name5:c.pdf12:piece lengthi262144e6:pieces40:#+F�J...
 #+END_EXAMPLE
-*** ONGOING M2: TheTideTorrent MUST encode metainfo file..
+*** TODO M2: TheTideTorrent MUST encode metainfo file..
 + Bencoding is the way of storing some data structure in the torrent. 
 + A torrent file is bencoded dictionaries which contains 4 types of data structure.
 1. Byte strings: 
