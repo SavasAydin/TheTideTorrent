@@ -20,7 +20,8 @@ decode_dict(Dict, Acc) ->
     decode_dict(Rest, maps:put(Key, Value, Acc)).
 
 decode_string(Str) ->
-    get_element(Str).
+    [Len, Str2] = string:split(Str, ":"),
+    lists:split(list_to_integer(Len), Str2).
 
 decode_integer(Int) ->
     decode_integer(Int, []).
@@ -44,15 +45,5 @@ decode_list(L) ->
 decode_list([$e | Rest], Res) ->
     {lists:reverse(Res), Rest};
 decode_list(L, Acc) ->
-    {E, Rest} = get_element(L),
+    {E, Rest} = decode(L),
     decode_list(Rest, [E | Acc]).
-
-get_element(D) ->
-    {Len, D2} = get_length(D, []),
-    {[$: | Element], Rest} = lists:split(list_to_integer(Len)+1, D2),
-    {Element, Rest}.
-
-get_length([N|T], Acc) when N >= $0 andalso N =< $9 ->
-    get_length(T, [N|Acc]);
-get_length([$:|T], Acc) ->
-    {lists:reverse(Acc), [$:|T]}.
