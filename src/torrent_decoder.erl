@@ -27,7 +27,7 @@ decode_integer(Int) ->
     decode_integer(Int, []).
 
 decode_integer([$e | Rest], Result) ->
-    {lists:reverse(Result), Rest};
+    {{int, lists:reverse(Result)}, Rest};
 decode_integer([$-, $0 | _], []) ->
     error(invalid_integer_format);
 decode_integer([$- | Rest], []) ->
@@ -43,7 +43,7 @@ decode_list(L) ->
     decode_list(L, []).
 
 decode_list([$e | Rest], Res) ->
-    {lists:reverse(Res), Rest};
+    {{list, lists:reverse(Res)}, Rest};
 decode_list(L, Acc) ->
     {E, Rest} = decode(L),
     decode_list(Rest, [E | Acc]).

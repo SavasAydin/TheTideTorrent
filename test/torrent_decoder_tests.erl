@@ -4,19 +4,19 @@
 
 integer_is_enclosed_in_i_and_e_test() ->
     Res = torrent_decoder:decode(<<"i20130922e">>),
-    ?assertEqual({"20130922", []}, Res).
+    ?assertEqual({{int, "20130922"}, []}, Res).
 
 anything_after_e_is_ignored_test() ->
     Res = torrent_decoder:decode(<<"i20130922e5:">>),
-    ?assertEqual({"20130922", "5:"}, Res).
+    ?assertEqual({{int, "20130922"}, "5:"}, Res).
 
 integer_zero_test() ->
     Res = torrent_decoder:decode(<<"i0e">>),
-    ?assertEqual({"0", []}, Res).
+    ?assertEqual({{int, "0"}, []}, Res).
 
 negative_integer_test() ->
     Res = torrent_decoder:decode(<<"i-3e">>),
-    ?assertEqual({"-3", []}, Res).
+    ?assertEqual({{int, "-3"}, []}, Res).
 
 invalid_integer_missing_e_ending_test() ->
     ?assertException(error,
@@ -50,7 +50,7 @@ invalid_integer_due_to_minus_before_zero_test() ->
 
 list_is_enclosed_in_l_and_e_test() ->
     Res = torrent_decoder:decode(<<"l3:ant5:horse1:5e">>),
-    ?assertEqual({["ant", "horse", "5"], []}, Res).
+    ?assertEqual({{list, ["ant", "horse", "5"]}, []}, Res).
 
 byte_string_encoded_string_length_followed_by_string_test() ->
     Res = torrent_decoder:decode(<<"4:dose">>),
@@ -73,11 +73,11 @@ decode_metainfo_file_test() ->
     Res = torrent_decoder:decode(Bin),
     ?assertEqual({#{"announce" => "http://tracker.kicks-ass.net:80/announce",
                     "created by" => "uTorrent/1870",
-                    "creation date" => "1543782548",
+                    "creation date" => {int, "1543782548"},
                     "encoding" => "UTF-8",
-                    "info" => #{"length" => "66465",
+                    "info" => #{"length" => {int, "66465"},
                                 "name" => "letters_numbers_ shapes_tracing1.pdf",
-                                "piece length" => "16384",
+                                "piece length" => {int, "16384"},
                                 "pieces" => [76,172,47,120,198,197,228,126,89,99,201,86,168,79,196,
                                              41,7,9,17,153,103,73,169,171,67,135,141,221,60,46,165,
                                              87,55,94,51,203,38,237,73,117,217,62,190,169,226,101,
